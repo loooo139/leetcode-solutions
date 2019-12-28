@@ -60,13 +60,14 @@ class Solution {
  public:
   int removeDuplicates(vector<int>& nums) {
     int idx = 0, i = 1;
+    if(nums.empty())return 0;
     while (i < nums.size()) {
       if (nums[i] != nums[idx]) {
         nums[++idx] = nums[i];
       }
       i++;
     }
-    return idx>0?idx+1:0;
+    return idx+1;
   }
 };
 // @lc code=end
