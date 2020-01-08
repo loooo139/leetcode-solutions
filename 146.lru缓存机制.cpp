@@ -26,50 +26,45 @@
  * 示例:
  * 
  * LRUCache cache = new LRUCache( 2 /* 缓存容量 */ );
- * 
- * cache.put(1, 1);
- * cache.put(2, 2);
- * cache.get(1);       // 返回  1
- * cache.put(3, 3);    // 该操作会使得密钥 2 作废
- * cache.get(2);       // 返回 -1 (未找到)
- * cache.put(4, 4);    // 该操作会使得密钥 1 作废
- * cache.get(1);       // 返回 -1 (未找到)
- * cache.get(3);       // 返回  3
- * cache.get(4);       // 返回  4
- * 
- * 
- */
+**cache.put(1, 1);
+*cache.put(2, 2);
+*cache.get(1);     // 返回  1
+*cache.put(3, 3);  // 该操作会使得密钥 2 作废
+*cache.get(2);     // 返回 -1 (未找到)
+*cache.put(4, 4);  // 该操作会使得密钥 1 作废
+*cache.get(1);     // 返回 -1 (未找到)
+*cache.get(3);     // 返回  3
+*cache.get(4);     // 返回  4
+*** /
 
-// @lc code=start
-class LRUCache {
-public:
-    LRUCache(int capacity) {
-        cap=capacity;
-        
+    // @lc code=start
+    class LRUCache {
+ public:
+  LRUCache(int capacity) { cap = capacity; }
+
+  int get(int key) {
+    auto it = m.find(key);
+    if (it == m.end()) return -1;
+    l.splice(l.begin(), l, it->second);
+    return it->second->second;
+  }
+
+  void put(int key, int value) {
+    auto it = m.find(key);
+    if (it != m.end()) l.erase(it->second);
+    l.push_front(make_pair(key, value));
+    m[key] = l.begin();
+    if (m.size() > cap) {
+      int k = l.rbegin()->first;
+      l.pop_back();
+      m.erase(k);
     }
-    
-    int get(int key) {
-        auto it=m.find(key);
-        if(it==m.end())return -1;
-        l.splice(l.begin(),l,it->second);
-        return it->second->second;
-    }
-    
-    void put(int key, int value) {
-        auto it=m.find(key);
-        if(it!=m.end())l.erase(it->second);
-        l.push_front(make_pair(key,value));
-        m[key]=l.begin();
-        if(m.size()>cap){
-            int k=l.rbegin()->first;
-            l.pop_back();
-            m.erase(k);
-        }
-    }
-private:
-int cap;
-list<pair<int,int>>l;
-unordered_map<int,list<pair<int,int>>::iterator>m;
+  }
+
+ private:
+  int cap;
+  list<pair<int, int>> l;
+  unordered_map<int, list<pair<int, int>>::iterator> m;
 };
 
 /**
@@ -79,4 +74,3 @@ unordered_map<int,list<pair<int,int>>::iterator>m;
  * obj->put(key,value);
  */
 // @lc code=end
-
