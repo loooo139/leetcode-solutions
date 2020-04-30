@@ -1,4 +1,4 @@
-f/*
+/*
  * @lc app=leetcode id=44 lang=cpp
  *
  * [44] Wildcard Matching
